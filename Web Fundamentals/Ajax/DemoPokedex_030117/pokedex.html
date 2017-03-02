@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Pokedex</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script type="text/javascript" src='http://code.jquery.com/jquery-1.10.2.min.js'></script>
+    <script type="text/javascript">
+  		$(document).ready(function(){
+        for(var i = 1; i < 30; i++)
+        {
+          $('#pokemon').append("<img src=http://pokeapi.co/media/img/" + i + ".png alt='' pokeID=" + i + ">");
+        }
+
+        /*
+        I discussed using console.log as a way to debug issues and see
+        the data I am getting back from an API call. At the end of the lecture
+        I made a note to tell students to clean their code and remove all their log statements
+        or at least comment them out. Leaving a console.log on a webpage in a production site
+        will result in your lead developer judging you and telling you to take it out.
+
+        I also made several mistakes along the way including forgetting to use # when referring
+        to an html tag's id. I then discussed the mistake and the difference between # . and
+        just referring to a regular tag with no class or id selector.
+        */
+
+        /*
+        When adding an attribute to the image tags for ID, students had lots of questions about
+        being able to modify the id selector, class selector, and how that would affect the css
+        of the html tag in real time.
+        */
+        $('img').click(function(){
+          var pokeImg = $(this).attr('src');
+          var pokeID = $(this).attr('pokeID');
+          var url = 'http://pokeapi.co/api/v1/pokemon/';
+          $.get(url + pokeID,function(res){
+            $('#name').html(res.name);
+            $('#pokeImg').attr('src', pokeImg);
+            var types = '';
+            for(var i = 0; i < res.types.length; i++)
+            {
+              types += "<li>" + res.types[i].name + "</li>";
+            }
+            $('#types').html(types);
+            $('#height').html(res.height);
+            $('#weight').html(res.weight);
+          })
+        })
+
+      });
+      </script>
+  </head>
+  <body>
+    <div id="wrapper">
+      <label>hello world</label>
+      <div id="pokemon"></div>
+      <div id="pokedex">
+        <h2 id="name"></h2>
+        <img id="pokeImg" src="" alt="">
+        <label>Types</label>
+        <ul id="types"></ul>
+        <label>Height</label>
+        <div id="height"></div>
+        <label>Weight</label>
+        <div id="weight"></div>
+      </div>
+    </div>
+  </body>
+</html>
